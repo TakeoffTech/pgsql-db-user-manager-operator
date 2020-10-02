@@ -1,0 +1,6 @@
+apiVersion: pgsql.takeoff.io/v1alpha1
+kind: ReadOnlyDBUser
+metadata:
+  name: readonlydbuser-sample
+spec:
+  foo: bar

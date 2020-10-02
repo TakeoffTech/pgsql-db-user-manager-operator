@@ -1,0 +1,20 @@
+# permissions for end users to view readonlydbusers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: readonlydbuser-viewer-role
+rules:
+- apiGroups:
+  - pgsql.takeoff.io
+  resources:
+  - readonlydbusers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - pgsql.takeoff.io
+  resources:
+  - readonlydbusers/status
+  verbs:
+  - get

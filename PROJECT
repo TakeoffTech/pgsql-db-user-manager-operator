@@ -1,0 +1,8 @@
+domain: takeoff.io
+layout: ansible.sdk.operatorframework.io/v1
+projectName: pgsql-db-user-manager-operator
+resources:
+- group: pgsql
+  kind: ReadOnlyDBUser
+  version: v1alpha1
+version: 3-alpha
