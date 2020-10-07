@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudsql-proxy
+spec:
+  selector:
+    matchLabels:
+      app: cloudsql-proxy
+  template:
+    metadata:
+      labels:
+        app: cloudsql-proxy
+    spec:
+      serviceAccountName: sql-proxy-ksa-wi
+      containers:
+      - name: cloud-sql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.17
+        command:
+          - "/cloud_sql_proxy"
+          - "-instances=takeoff-tgtest-d837:us-central1:molecule-pgsql=tcp:0.0.0.0:5432"
+        ports:
+          - containerPort: 5432
+            name: sql
+            protocol: TCP
+        securityContext:
+          runAsNonRoot: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudsql-postgres
+spec:
+  ports:
+  - name: sql
+    port: 5432
+    protocol: TCP
+    targetPort: sql
+  selector:
+    app: cloudsql-proxy
+  type: ClusterIP

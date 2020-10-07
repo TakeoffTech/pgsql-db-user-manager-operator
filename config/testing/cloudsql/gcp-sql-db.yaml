@@ -1,0 +1,9 @@
+apiVersion: sql.cnrm.cloud.google.com/v1beta1
+kind: SQLDatabase
+metadata:
+  name: testdb
+  annotations:
+    cnrm.cloud.google.com/project-id: takeoff-tgtest-d837
+spec:
+  instanceRef:
+    name: molecule-pgsql

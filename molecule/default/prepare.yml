@@ -13,7 +13,7 @@
       when: not operator_image
 
     - name: Set testing image
-      command: '{{ kustomize }} edit set image testing={{ operator_image }}'
+      command: '{{ kustomize }} edit set image testing={{ operator_image }}:{{ operator_image_tag }}'
       args:
         chdir: '{{ config_dir }}/testing'
 
