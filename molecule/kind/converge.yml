@@ -11,7 +11,7 @@
           path: '{{ project_dir }}'
           pull: no
         name: '{{ operator_image }}'
-        tag: latest
+        tag: '{{ operator_image_tag }}'
         push: no
         source: build
         force_source: yes

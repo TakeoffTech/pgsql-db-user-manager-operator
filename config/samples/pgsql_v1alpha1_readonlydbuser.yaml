@@ -7,7 +7,11 @@ metadata:
     ansible.sdk.operatorframework.io/verbosity: "5"
 spec:
   db_name: testdb
-  password: changeme1234
+  password:
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: testdbrouser-pw-secret
   pghost: cloudsql-postgres
   pguser: postgresadmin
   pgpass: donotuseme1234

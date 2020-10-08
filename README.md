@@ -16,7 +16,12 @@ metadata:
   name: testdbrouser # name of dbuser to create
 spec:
   db_name: testdb # name of database to give select, use (readonly) access to
-  password: changeme1234 # password for user
+  password:
+    value: string # password value in plaintxt
+    valueFrom: # get the password from a kubernetes secret object
+      secretKeyRef:
+        key: string
+        name: string
   pghost: cloudsql-postgres # host to connect to
   pguser: postgres # admin user to connect and create user as
   pgpass: donotuseme1234 # password for admin user

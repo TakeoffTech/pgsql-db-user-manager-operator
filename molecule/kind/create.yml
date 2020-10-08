@@ -6,3 +6,7 @@
   tasks:
     - name: Create test kind cluster
       command: kind create cluster --name osdk-test --kubeconfig {{ kubeconfig }}
+    
+    - name: show kubeconfig location
+      debug:
+        var: kubeconfig

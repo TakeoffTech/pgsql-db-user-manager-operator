@@ -2,49 +2,67 @@
 # tasks file for ReadOnlyDBUser
 
 - name: "Check required variables"
-  fail: msg="Variable '{{ item }}' is not defined"
+  fail: 
+    msg: "Variable '{{ item }}' is not defined"
   when: item not in vars
   with_items: "{{required_vars}}"
 
-- name: create user
-  community.general.postgresql_user:
-    db: postgres
-    name: '{{ ansible_operator_meta.name }}'
-    password: '{{password}}'
-    login_host: '{{pghost}}'
-    login_user: '{{pguser}}'
-    login_password: '{{pgpass}}'
+# password.valueFrom
+- name: Get password secret
+  community.kubernetes.k8s_info:
+    kind: Secret
+    namespace: "{{ ansible_operator_meta.namespace }}"
+    name: "{{ password.value_from.secret_key_ref.name}}"
+  register: password_secret
+  when: password.valueFrom is defined
 
-- name: GRANT USAGE ON SCHEMA public TO {{ ansible_operator_meta.name }}
-  community.general.postgresql_privs:
-    db: '{{db_name}}'
-    priv: USAGE
-    type: schema
-    obj: public
-    role: '{{ ansible_operator_meta.name }}'
-    login_host: '{{pghost}}'
-    login_user: '{{pguser}}'
-    login_password: '{{pgpass}}'
+- name: Set db_user_password fact
+  set_fact:
+    db_user_password: "{{ (password_secret.resources[0].data.[password.value_from.secret_key_ref.key]|b64decode) | default(password.value) }}"
 
-- name: GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{ ansible_operator_meta.name }}
-  community.general.postgresql_privs:
-    db: '{{db_name}}'
-    priv: SELECT
-    obj: ALL_IN_SCHEMA
-    role: '{{ ansible_operator_meta.name }}'
-    schema: public
-    login_host: '{{pghost}}'
-    login_user: '{{pguser}}'
-    login_password: '{{pgpass}}'
+- name: Fetch password from secret
+  set_fact:
+    password: "{{ lookup('community.kubernetes.k8s', kind='Secret', namespace=ansible_operator_meta.namespace resource_name={{password.valueFrom.secretKeyRef.name}}) }}"
 
-- name: ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO {{ ansible_operator_meta.name }}
-  community.general.postgresql_privs:
-    db: '{{db_name}}'
-    type: default_privs
-    schema: public
-    objs: TABLES
-    privs: SELECT
-    role: '{{ ansible_operator_meta.name }}'
-    login_host: '{{pghost}}'
-    login_user: '{{pguser}}'
-    login_password: '{{pgpass}}'
+# - name: create user
+#   community.general.postgresql_user:
+#     db: postgres
+#     name: '{{ ansible_operator_meta.name }}'
+#     password: '{{password}}'
+#     login_host: '{{pghost}}'
+#     login_user: '{{pguser}}'
+#     login_password: '{{pgpass}}'
+
+# - name: GRANT USAGE ON SCHEMA public TO {{ ansible_operator_meta.name }}
+#   community.general.postgresql_privs:
+#     db: '{{db_name}}'
+#     priv: USAGE
+#     type: schema
+#     obj: public
+#     role: '{{ ansible_operator_meta.name }}'
+#     login_host: '{{pghost}}'
+#     login_user: '{{pguser}}'
+#     login_password: '{{pgpass}}'
+
+# - name: GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{ ansible_operator_meta.name }}
+#   community.general.postgresql_privs:
+#     db: '{{db_name}}'
+#     priv: SELECT
+#     obj: ALL_IN_SCHEMA
+#     role: '{{ ansible_operator_meta.name }}'
+#     schema: public
+#     login_host: '{{pghost}}'
+#     login_user: '{{pguser}}'
+#     login_password: '{{pgpass}}'
+
+# - name: ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO {{ ansible_operator_meta.name }}
+#   community.general.postgresql_privs:
+#     db: '{{db_name}}'
+#     type: default_privs
+#     schema: public
+#     objs: TABLES
+#     privs: SELECT
+#     role: '{{ ansible_operator_meta.name }}'
+#     login_host: '{{pghost}}'
+#     login_user: '{{pguser}}'
+#     login_password: '{{pgpass}}'
