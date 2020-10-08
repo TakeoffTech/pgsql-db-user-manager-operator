@@ -1,0 +1,11 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: sql-proxy-sa-project-policymember
+  annotations:
+    cnrm.cloud.google.com/project-id: takeoff-tgtest-d837
+spec:
+  member: serviceAccount:sql-proxy-sa@takeoff-tgtest-d837.iam.gserviceaccount.com
+  role: roles/cloudsql.client
+  resourceRef:
+    kind: Project

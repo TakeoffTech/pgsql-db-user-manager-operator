@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    cnrm.cloud.google.com/project-id: takeoff-tgtest-d837
+  labels:
+    control-plane: controller-manager
+  name: test

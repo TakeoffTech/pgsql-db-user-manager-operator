@@ -1,0 +1,6 @@
+ansible
+molecule[docker]
+google-auth
+requests
+psycopg2
+openshift

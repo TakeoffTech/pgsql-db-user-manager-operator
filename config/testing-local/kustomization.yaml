@@ -1,0 +1,16 @@
+# Adds namespace to all resources.
+namespace: osdk-test
+
+# Labels to add to all resources and selectors.
+#commonLabels:
+#  someName: someValue
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../testing/prefix
+
+images:
+- name: testing
+  newName: testing-operator
+  newTag: latest

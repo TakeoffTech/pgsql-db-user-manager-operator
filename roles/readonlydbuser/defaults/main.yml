@@ -1,0 +1,20 @@
+---
+# defaults file for ReadOnlyDBUser
+
+required_vars:
+    - db_name
+    - password
+    - pghost
+    - pguser
+    - pgpass
+
+# database name to connect to to create the readonly user
+#db_name: ""
+
+# password for the user
+#password: ""
+
+# postgresql connection
+#pghost: "" 
+pguser: "postgres"
+#pgpass: ""

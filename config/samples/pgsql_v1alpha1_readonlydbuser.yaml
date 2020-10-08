@@ -1,0 +1,17 @@
+apiVersion: pgsql.takeoff.io/v1alpha1
+kind: ReadOnlyDBUser
+metadata:
+  name: testdbrouser
+  namespace: osdk-test
+  annotations:
+    ansible.sdk.operatorframework.io/verbosity: "5"
+spec:
+  db_name: testdb
+  password:
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: testdbrouser-pw-secret
+  pghost: cloudsql-postgres
+  pguser: postgresadmin
+  pgpass: donotuseme1234

@@ -1,0 +1,9 @@
+resources:
+    - gcp-sql-db.yaml
+    - gcp-sql-instance.yaml
+    - gcp-sql-policy-member.yaml
+    - gcp-sql-service-account.yaml
+    - gcp-sql-user.yaml
+    - gcp-wi-policy.yaml
+    - proxy_with_workload_identity.yaml
+    - service_account.yaml

@@ -1,0 +1,17 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks: 
+
+    - name: Build operator image
+      docker_image:
+        build:
+          path: '{{ project_dir }}'
+          pull: no
+        name: '{{ operator_image }}'
+        tag: '{{ operator_image_tag }}'
+        push: yes
+        source: build
+        force_source: yes
